@@ -1,10 +1,13 @@
 import json
+import difflib
 
 print("SPIRIT: Hello! I am your college assistant.")
 print("Type 'bye' to exit.\n")
 
 with open("data.json") as f:
     data = json.load(f)
+
+questions = list(data.keys())
 
 while True:
 
@@ -14,13 +17,9 @@ while True:
         print("SPIRIT: Goodbye! Have a nice day.")
         break
 
-    found = False
+    match = difflib.get_close_matches(user, questions, n=1, cutoff=0.4)
 
-    for key in data:
-        if key in user:
-            print("SPIRIT:", data[key])
-            found = True
-            break
-
-    if not found:
+    if match:
+        print("SPIRIT:", data[match[0]])
+    else:
         print("SPIRIT: Sorry, I don't understand that yet.")
